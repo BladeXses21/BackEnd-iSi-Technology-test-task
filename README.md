@@ -40,20 +40,20 @@ Djangо, DRF
 ```
 pip install virtualenv
 ```
-#### встановити залежності 
+#### встановіть залежності 
 ```
-pip install -r requirements.tx
+pip freeze
 ```
-#### провести міграції 
+#### проведіть міграції 
 ```
 python manage.py makemigrations
 python manage.py migrate
 ```
-#### запустити локальний сервер
+#### запустіть локальний сервер
 ```
 python manage.py runserver
 ```
-створіть два супер користувача
+#### створіть два супер користувача
 ```
 python manage.py createsuperuser
 ```
