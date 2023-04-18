@@ -1,5 +1,5 @@
 # Завдання тестового завдання
-```angular2html
+```1angular2html
 Це тестове завдання з метою оцінки навичок веб-розробки. 
 Мета завдання - створити REST API, що надасть можливість керувати повідомленнями між двома користувачами.
 ```
@@ -35,23 +35,31 @@ Djangо, DRF
 ## suport_education
 
 ### Project setup
-```angular2html
-встановіть python3 найновішої версії
-добавте та активуйте virtualenv
-- pip install virtualenv
-встановити залежності 
-- pip install -r requirements.tx
-провести міграції 
--  python manage.py makemigrations та python manage.py migrate
-запустити локальний сервер 
-- python manage.py runserver
+#### встановіть python3 найновішої версії
+#### добавте та активуйте virtualenv
+```
+pip install virtualenv
+```
+#### встановити залежності 
+```
+pip install -r requirements.tx
+```
+#### провести міграції 
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+#### запустити локальний сервер
+```
+python manage.py runserver
+```
 створіть два супер користувача
-- python manage.py createsuperuser
+```
+python manage.py createsuperuser
 ```
 ## project work
-```angular2html
+
 [перейдіть на сайт](http://localhost:8000).
-в першому полі вводите ім'я першого юзера (себе)
-в другому полі вводите ім'я другого юзера 
-після цього вас перекидає в thread з користувачем.
-```
+#### в першому полі вводите ім'я першого юзера (себе)
+#### в другому полі вводите ім'я другого юзера 
+#### після цього вас перекидає в thread з користувачем.
