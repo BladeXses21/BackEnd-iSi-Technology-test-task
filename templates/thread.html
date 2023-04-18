@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .container {
+            border: 2px solid #dedede;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .darker {
+            border-color: #ccc;
+            background-color: #ddd;
+        }
+
+        .container::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .text-container {
+            width: 50%;
+            text-align: left;
+        }
+
+        .container img {
+            float: left;
+            max-width: 60px;
+            width: 100%;
+            margin-right: 20px;
+            border-radius: 50%;
+        }
+
+        .container img.right {
+            float: right;
+            margin-left: 20px;
+            margin-right: 0;
+        }
+
+        .time-right {
+            float: right;
+            color: #aaa;
+        }
+
+        .time-left {
+            float: left;
+            color: #999;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="header-container">
+    <div class="text">
+        <h2>{{ thread }} - DjChat</h2>
+    </div>
+    <form method="POST" action="{% url 'delete_thread' thread %}">
+        {% csrf_token %}
+        <button type="submit">Видалити</button>
+    </form>
+</div>
+
+<div id="display">
+
+    {#    <div class="container darker">#}
+    {#        <b>Tom</b>#}
+    {#        <p>Hello Everyone, How Are You Guys Doing?</p>#}
+    {#        <span class="time-left">20th, April 2021</span>#}
+    {#    </div>#}
+
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        setInterval(function () {
+            $.ajax({
+                type: 'GET',
+                url: "/getMessages/{{thread}}/",
+                success: function (response) {
+                    $("#display").empty();
+                    for (var key in response.messages) {
+                        var sender_name = response.messages[key].sender_name;
+                        var date = new Date(response.messages[key].created);
+                        var text = response.messages[key].text
+                        var is_read = response.messages[key].is_read
+                        var formattedDate = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+                        var temp = "<div class='container darker'><b>" + sender_name + "</b><p>" + text + "</p><span class='time-left'>" + formattedDate + " | Прочитано:" + is_read + "</span></div>";
+                        $("#display").append(temp);
+                    }
+                },
+            });
+        }, 1000);
+    })
+</script>
+
+
+<div class="container">
+    <style>
+        input[type=text], select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type=submit] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+
+        div {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+    </style>
+
+    <form id="post-form">
+        {% csrf_token %}
+        <input type="hidden" name="participant2" id="participant2" value="{{ participant2 }}"/>
+        <input type="hidden" name="thread_id" id="thread_id" value="{{ thread_details.id }}"/>
+        <input type="text" name="message" id="message" width="100px"/>
+        <input type="submit" value="Send">
+    </form>
+</div>
+
+
+</body>
+
+<script type="text/javascript">
+    $(document).on('submit', '#post-form', function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: 'POST',
+            url: '/send',
+            data: {
+                participant2: $('#participant2').val(),
+                thread_id: $('#thread_id').val(),
+                message: $('#message').val(),
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+                {#alert(data)#}
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseText);
+            }
+        });
+        document.getElementById('message').value = ''
+    });
+</script>
+
+</html>
