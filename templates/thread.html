@@ -69,11 +69,11 @@
 
 <div class="header-container">
     <div class="text">
-        <h2>{{ thread }} - DjChat</h2>
+        <h2>{{ thread }} - Django Thread</h2>
     </div>
     <form method="POST" action="{% url 'delete_thread' thread %}">
         {% csrf_token %}
-        <button type="submit">Видалити</button>
+        <button type="submit">Delete Thread </button>
     </form>
 </div>
 
