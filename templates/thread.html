@@ -33,10 +33,6 @@
             align-items: center;
         }
 
-        .text-container {
-            width: 50%;
-            text-align: left;
-        }
 
         .container img {
             float: left;
@@ -52,15 +48,6 @@
             margin-right: 0;
         }
 
-        .time-right {
-            float: right;
-            color: #aaa;
-        }
-
-        .time-left {
-            float: left;
-            color: #999;
-        }
     </style>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
             crossorigin="anonymous"></script>
@@ -70,20 +57,16 @@
 <div class="header-container">
     <div class="text">
         <h2>{{ thread }} - Django Thread</h2>
+        <form method="POST" action="{% url 'delete_thread' thread %}">
+            {% csrf_token %}
+            <button type="submit">Delete Thread</button>
+        </form>
+        <div class="text-container" id='unread-container'>
+        </div>
     </div>
-    <form method="POST" action="{% url 'delete_thread' thread %}">
-        {% csrf_token %}
-        <button type="submit">Delete Thread </button>
-    </form>
 </div>
 
 <div id="display">
-
-    {#    <div class="container darker">#}
-    {#        <b>Tom</b>#}
-    {#        <p>Hello Everyone, How Are You Guys Doing?</p>#}
-    {#        <span class="time-left">20th, April 2021</span>#}
-    {#    </div>#}
 
 </div>
 
@@ -106,6 +89,15 @@
                         $("#display").append(temp);
                     }
                 },
+            });
+            $.ajax({
+                type: 'GET',
+                url: "/get_unread_messages_count/{{thread}}/",
+                success: function (response) {
+                    $("#unread-container").empty();
+                    var count = "<span class='time-left'>" + "unread messages count:" + + response.unread_count + "</span>";
+                    $("#unread-container").append(count);
+                }
             });
         }, 1000);
     })

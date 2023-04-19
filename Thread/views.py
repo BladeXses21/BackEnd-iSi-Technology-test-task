@@ -3,11 +3,15 @@ from django.shortcuts import render, redirect
 from Thread.models import Thread, Message
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
+from django.db.models import Q
 
 
 # Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    user = request.user
+    print(user)
+    threads = Thread.objects.filter(Q(participant1=user) | Q(participant2=user))
+    return render(request, 'home.html', {'threads': threads})
 
 
 def thread_view(request, thread):
@@ -37,7 +41,6 @@ def checkview(request):
         return redirect('/' + participant1_name + '/?participant2=' + participant2_name)
 
 
-@login_required
 def send(request):
     if request.method == 'POST':
         message_text = request.POST['message']
@@ -78,3 +81,13 @@ def delete_thread(request, thread):
     thread = Thread.objects.get(id=thread_details.id)
     thread.delete()
     return redirect('/')
+
+
+def get_unread_messages_count(request, thread):
+    thread_details = Thread.objects.get(participant1__username=thread)
+    messages = Message.objects.filter(thread=thread_details.id)
+    unread_messages = 0
+    for message in messages:
+        if message.is_read is False:
+            unread_messages += 1
+    return JsonResponse({'unread_count': unread_messages})
