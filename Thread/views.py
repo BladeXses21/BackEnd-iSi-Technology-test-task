@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from Thread.models import Thread, Message
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
 
@@ -9,7 +8,6 @@ from django.db.models import Q
 # Create your views here.
 def home(request):
     user = request.user
-    print(user)
     threads = Thread.objects.filter(Q(participant1=user) | Q(participant2=user))
     return render(request, 'home.html', {'threads': threads})
 

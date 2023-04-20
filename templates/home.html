@@ -104,8 +104,9 @@
     <ul>
         {% for thread in threads %}
             <a href="/{{ thread.participant1.username }}/?participant2={{ thread.participant2.username }}">
-                {{ thread.participant1.username }} and {{ thread.participant2.username }} {{ thread.created }}
+                {{ thread.participant1.username }} and {{ thread.participant2.username }} {{ thread.created.date }}
             </a>
+            <br>
         {% endfor %}
     </ul>
 </div>
